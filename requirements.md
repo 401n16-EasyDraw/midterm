@@ -38,7 +38,7 @@ Same user can download the writing onto a PDF file.
 
 ### Data Flow
 
-When the writer writes to the deposition page, the draw.js file emits a socket.io event to hub.js, which then emits an event to redraw.js. On page reload, redraw.js requests the current data from draw.js.
+When the writer writes to the deposition page, the `draw.js` file emits a socket.io event to `hub.js`, which then emits an event to `redraw.js`. On page reload, `redraw.js` requests the current data from `draw.js`.
 
 ### Non-functional requirements are requirements that are not directly related to the functionality of the application but still important to the app.
 

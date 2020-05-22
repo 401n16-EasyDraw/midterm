@@ -1,8 +1,10 @@
-## Midterm Project: Real-Time Canvas Drawing with Socket.IO
+## Midterm Project: EasyDraw
 
-The goal of this project is to allow a deposition to be drawn in one browser, and a reporter to be able to view the same content in another browser (view only) at the same time.
+**Team Members**: Earl Jay Caoile, Shubham Majumdar, Tammy Ip
 
-### Authors: Shubham Majumdar, Tammy Ip, and Earl Jay Caoile
+## Project description
+
+Our application allows two viewers to look at the same document on their own web browser, while one user is making changes on a document, those will be reflected on the other person’s browser simultaneously. Our drawing tool allows the user to create and manipulate lines, shapes, colors, and text to your documents.
 
 ### Links and Resources
 

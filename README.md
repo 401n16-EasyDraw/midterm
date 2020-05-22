@@ -1,4 +1,4 @@
-## Midterm Project: EasyDraw
+# Midterm Project: EasyDraw
 
 **Team Members**: Earl Jay Caoile, Shubham Majumdar, Tammy Ip
 
@@ -10,7 +10,7 @@ Our application allows two viewers to look at the same document on their own web
 
 *insert links and resources here*
 
-#### Documentation
+### Documentation
 
 *insert documentation here*
 
@@ -18,10 +18,10 @@ Our application allows two viewers to look at the same document on their own web
 
 *insert setup here*
 
-#### Tests
+### Tests
 
 *insert testing here (probably just `npm test`)*
 
-#### UML
+### UML
 
 *insert UML diagram here*

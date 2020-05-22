@@ -6,20 +6,20 @@ The goal of this project is to allow a deposition to be drawn in one browser, an
 
 ### Links and Resources
 
-Insert links and resources here.
+*insert links and resources here*
 
 #### Documentation
 
-Insert documentation here.
+*insert documentation here*
 
 ### Setup
 
-Insert setup instructions here.
+*insert setup here*
 
 #### Tests
 
-Insert test instructions here.
+*insert testing here (probably just `npm test`)*
 
 #### UML
 
-Insert UML diagram here.
+*insert UML diagram here*

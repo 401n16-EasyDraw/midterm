@@ -24,4 +24,10 @@ Our application allows two viewers to look at the same document on their own web
 
 ### UML
 
-*insert UML diagram here*
+![UML](midterm-uml.png)
+
+### Wireframe
+
+
+![Wireframe Page 1](Wireframe_1.png)
+![Wireframe Page 2](Wireframe_2.png)

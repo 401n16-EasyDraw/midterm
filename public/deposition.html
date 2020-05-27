@@ -15,10 +15,8 @@
 <body style="margin-top:30px;">
   <div class="container">
     <div class="alert alert-info" style="padding: 10px !important; margin-bottom: 5px; width:88%">
-      <strong>Socket IO &#10084;</strong> - This is a drawing board for a
-      reporter. Open the reporter page to see a view-only version of this
+      This is a drawing board for someone to write on a deposition. Open the reporter page to see a view-only version of this
       page.
-      <strong>Cool, isn't ?</strong>
     </div>
     <p>
       <button type="button" class="btn btn-primary btn-sm" value="pencil" id="pencil-button">
@@ -45,15 +43,6 @@
       <label for="color" style="position:absolute;">Color : </label>
       <input id="color-picker" value="#000000" style="width:80px;" class="jscolor {width:243, height:150, position:'right',
         borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#666'}" />
-      <!-- <span class="form-group" style="width: 100px;display: inline-block;">
-          <label for="draw-grid">Grid: </label>
-          <select class="form-control" id="draw-grid">
-            <option value="normal">Normal</option>
-            <option value="medium" selected>Medium</option>
-            <option value="large">Large</option>
-            <option value="nogrid">No Grid</option>
-          </select>
-        </span> -->
       <span class="form-group" style="width: 90px;display: inline-block;">
         <label for="line-width">Thickness: </label>
         <select class="form-control" id="line-width">
@@ -105,9 +94,6 @@
         Delete Page
       </button>
     </p>
-    <!-- <div id="scrollcontent">
-        <div class="page"></div>
-      </div> -->
     <div id="container">
       The standard Lorem Ipsum passage, used since the 1500s "Lorem ipsum
       dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -192,6 +178,7 @@
   <script src="bootstrap/js/bootstrap.min.js"></script>
   <script src="jscolor/jscolor.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script src="vars.js"></script>
   <script src="draw.js"></script>
 </body>
 </html>

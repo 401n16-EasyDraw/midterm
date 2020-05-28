@@ -3,16 +3,11 @@
 /**
  * Socket.io emit that grabs canvas data from the draw page automatically on page load
  */
-getAllHistories();
-
-function getAllHistories() {
-  drawChannel.emit('getAllHistories');
-}
+drawChannel.emit('getAllHistories');
 
 /**
  * Handles a read element by calling the handlePayload function
  */
-
 drawChannel.on('read', (payload) => {
   handlePayload(payload);
 });
@@ -32,9 +27,7 @@ drawChannel.on('deliveredAllHistories', (payload) => {
  * Creates a new page when necessary.
  * @param {object} payload - object containing index and all histories
  */
-
 drawChannel.on('deliveredCurrHistory', (payload) => {
-  console.log('What is all histories?', all_histories);
   if (payload.currIndex <= all_histories.length - 1) {
     all_histories[payload.currIndex] = payload.line_history;
     redrawExistingPage(payload.currIndex);
@@ -47,9 +40,7 @@ drawChannel.on('deliveredCurrHistory', (payload) => {
 
 /**
  * Takes a payload containing the index of the page to delete and uses it to perform an array splice
- * Note: WE MIGHT NOT NEED THIS! IT COULD BE REDUNDANT BECAUSE DRAW DOES SOMETHING SIMILAR! PENDING DELETION!
  */
-
 drawChannel.on('deleteHistory', (payload) => {
   all_histories.splice(payload, 1);
 });
@@ -57,7 +48,6 @@ drawChannel.on('deleteHistory', (payload) => {
 /**
  * Takes a payload containing the object of the draw page's current coordinates so that the redraw page can sync
  */
-
 drawChannel.on('updateScroll', (payload) => {
   updateScrollInfo(payload);
 });
@@ -66,9 +56,7 @@ drawChannel.on('updateScroll', (payload) => {
  * Event listener that saves the current page as a pdf when a user clicks the button with an ID of save-button.
  * This functionality is still a work in a progress. We have not implemented the ability to print past one page yet
  */
-
 $('#save-button').on('click', function () {
-  console.log('save button clicked!');
   const imgData = canvas.toDataURL('#ffffff', {
     type: 'image/jpeg',
     encoderOptions: 1.0,

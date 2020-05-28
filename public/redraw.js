@@ -28,7 +28,6 @@ drawChannel.on('deliveredAllHistories', (payload) => {
  * @param {object} payload - object containing index and all histories
  */
 drawChannel.on('deliveredCurrHistory', (payload) => {
-  console.log('What is all histories?', all_histories);
   if (payload.currIndex <= all_histories.length - 1) {
     all_histories[payload.currIndex] = payload.line_history;
     redrawExistingPage(payload.currIndex);
@@ -58,7 +57,6 @@ drawChannel.on('updateScroll', (payload) => {
  * This functionality is still a work in a progress. We have not implemented the ability to print past one page yet
  */
 $('#save-button').on('click', function () {
-  console.log('save button clicked!');
   const imgData = canvas.toDataURL('#ffffff', {
     type: 'image/jpeg',
     encoderOptions: 1.0,

@@ -2,6 +2,10 @@
 
 sendAllHistories();
 
+/**
+ * @param {object} canvas - canvas HTML element to edit
+ * @param {object} event - event object
+ */
 function getCursorPosition(canvas, event) {
   console.log('Canvas type:', canvas);
   console.log('Event type:', event);
@@ -49,26 +53,23 @@ function getCursorPosition(canvas, event) {
 
 function updateHistoryAndIndex() {
   const historyPayload = { line_history, currIndex };
-  //console.log('historyPayload:', historyPayload);
-  // need to emit somewhere here once we get socket.io functionality
+  drawChannel.emit('sendCurrHistory', historyPayload);
 }
 
 /**
  * Helper function that sends the histories of all pages from the drawer to the viewer
  */
-
 function sendAllHistories() {
   const scrollY = window.scrollY;
   const height = canvas.height;
   console.log('scroll to send on page load:', scrollY);
   const historyPayload = { all_histories, currIndex, scrollY, height };
-  //console.log('historyPayload:', historyPayload);
+  drawChannel.emit('sendAllHistories', historyPayload);
 }
 
 /**
  * Event listener that calculates the page's current position when a scroll occurs
  */
-
 document.addEventListener('scroll', function() {
   let scrollPayload = {};
   if (getDocHeight() - 20 <= getScrollXY()[1] + window.innerHeight) {
@@ -76,7 +77,7 @@ document.addEventListener('scroll', function() {
   }
   scrollPayload.scrollY = window.scrollY;
   updateScrollInfo(scrollPayload);
-  // need to emit somewhere here once we get socket.io functionality
+  sendScrollInfo(scrollPayload);
   redrawExistingPage(currIndex);
   updateHistoryAndIndex();
 });
@@ -87,29 +88,27 @@ document.addEventListener('scroll', function() {
 $canvas.on('mousedown', function(e) {
   const payload = getCursorPosition(canvas, e);
   //console.log('payload on mousedown:', payload);
-  // need to emit somewhere here once we get socket.io functionality
+  drawChannel.emit('draw', payload);
 });
 
 /**
  * Event listener that emits a draw event on mouse movement if the user is actually drawing
  */
-
 $canvas.on('mousemove', function(e) {
   if (isDrawing) {
     const payload = getCursorPosition(canvas, e);
     //console.log('payload on mousedown:', payload);
-    // need to emit somewhere here once we get socket.io functionality
+    drawChannel.emit('draw', payload);
   }
 });
 
 /**
  * Event listener that emits one last draw event and sets the isDrawing boolean to false
  */
-
 $canvas.on('mouseup', function(e) {
   if (isDrawing) {
     const payload =  getCursorPosition(canvas, e);
-    // need to emit somewhere here once we get socket.io functionality
+    drawChannel.emit('draw', payload);
     isDrawing = false;
   }
 });
@@ -117,7 +116,6 @@ $canvas.on('mouseup', function(e) {
 /**
  * Event listener that sets the isDrawing boolean to false if the mouse leaves the canvas element
  */
-
 $canvas.on('mouseleave', function(e) {
   isDrawing = false;
 });
@@ -132,6 +130,7 @@ $('#clear-all').on('click', function() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   line_history = new Array();
   all_histories[currIndex] = line_history;
+  drawChannel.emit('sendHistory', line_history);
   updateHistoryAndIndex();
 });
 
@@ -178,10 +177,10 @@ $('#prev-page').on('click', function() {
  * that page will display upon deletion of current page. If a previous page does not exist, either the next page
  * will display or the current page will simply be cleared.
  */
-
 $('#delete-page').on('click', function() {
   if (all_histories.length) {
     all_histories.splice(currIndex, 1);
+    drawChannel.emit('deleteHistory', currIndex);
     if (all_histories.length > 0) {
       const newIndex = currIndex === 0 ? currIndex + 1 : currIndex - 1;
       redrawExistingPage(newIndex);
@@ -191,4 +190,11 @@ $('#delete-page').on('click', function() {
     }
     updateHistoryAndIndex();
   }
+});
+
+/**
+ * Calls the sendAllHistories function when a socket.io getAllHistories emit is received
+ */
+drawChannel.on('getAllHistories', () => {
+  sendAllHistories();
 });

@@ -25,6 +25,12 @@ const context = canvas.getContext('2d');
 canvas.width = $container.innerWidth();
 canvas.height = $container.innerHeight();
 const $body = $('body');
+let isTyping = false;
+
+let currentAction = 'pencil';
+let clickedX = 0;
+let clickedY = 0;
+let currTextbox;
 
 /**
  * Function that detect the distance between the mouse and the top of the document. 

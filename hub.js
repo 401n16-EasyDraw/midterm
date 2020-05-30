@@ -10,6 +10,11 @@ draw.on('connection', socket => {
     draw.emit('read', payload);
   });
 
+  socket.on('textWrite', payload => {
+    console.log(payload);
+    draw.emit('textRead', payload);
+  });
+
   socket.on('getAllHistories', () => {
     draw.emit('getAllHistories');
   });

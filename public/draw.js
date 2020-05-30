@@ -7,43 +7,65 @@ sendAllHistories();
  * @param {object} event - event object
  */
 function getCursorPosition(canvas, event) {
-  const lineWidth = $('#line-width').val();
-  const lineColor = `#${$('#color-picker').val()}`;
+  const rect = canvas.getBoundingClientRect();
+  const newXCoords = event.clientX - rect.left;
+  const newYCoords = event.clientY - rect.top;
 
-  if (event.type === 'mousedown' || isDrawing) {
+  /* eslint-disable */
+  switch (currentAction) {
+    case 'pencil':
+      const lineWidth = $('#line-width').val();
+      const lineColor = `#${$('#color-picker').val()}`;
+
+      if (event.type === 'mousedown' || isDrawing) {
+
+        if (event.type !== 'mousedown') {
+          drawLine(
+            context,
+            xCoord,
+            yCoord,
+            newXCoords,
+            newYCoords,
+            lineWidth,
+            lineColor
+          );
+        }
+
+        xCoord = newXCoords;
+        yCoord = newYCoords;
+
+        const coordObj = {
+          x: xCoord,
+          y: yCoord,
+          thickness: lineWidth,
+          color: lineColor,
+          eventType: event.type,
+        };
+
+        isDrawing = event.type === 'mouseup' ? false : true;
+        line_history.push(coordObj);
+        all_histories[currIndex] = line_history;
+        return coordObj;
+      }
+      break;
+    case 'text':
+      clickedX = newXCoords;
+      clickedY = newYCoords;
+      break;
+    default:
+      break;
+  }
+  /* eslint-enable */
+}
+
+$canvas.on('keyup', (event) => {
+  if (currentAction === 'type') {
     const rect = canvas.getBoundingClientRect();
     const newXCoords = event.clientX - rect.left;
     const newYCoords = event.clientY - rect.top;
-
-    if (event.type !== 'mousedown') {
-      drawLine(
-        context,
-        xCoord,
-        yCoord,
-        newXCoords,
-        newYCoords,
-        lineWidth,
-        lineColor
-      );
-    }
-
-    xCoord = newXCoords;
-    yCoord = newYCoords;
-
-    const coordObj = {
-      x: xCoord,
-      y: yCoord,
-      thickness: lineWidth,
-      color: lineColor,
-      eventType: event.type,
-    };
-
-    isDrawing = event.type === 'mouseup' ? false : true;
-    line_history.push(coordObj);
-    all_histories[currIndex] = line_history;
-    return coordObj;
+    context.fillText(event.target.value, newXCoords, newYCoords);
   }
-}
+});
 
 /**
  * Helper function that sends the history of the drawer's current page to the viewer's page
@@ -67,7 +89,7 @@ function sendAllHistories() {
 /**
  * Event listener that calculates the page's current position when a scroll occurs
  */
-document.addEventListener('scroll', function() {
+document.addEventListener('scroll', function () {
   let scrollPayload = {};
   if (getDocHeight() - 20 <= getScrollXY()[1] + window.innerHeight) {
     scrollPayload.height = canvas.height;
@@ -82,7 +104,7 @@ document.addEventListener('scroll', function() {
 /**
  * Event listener that emits a draw event on mousedown
  */
-$canvas.on('mousedown', function(e) {
+$canvas.on('mousedown', function (e) {
   const payload = getCursorPosition(canvas, e);
   drawChannel.emit('draw', payload);
 });
@@ -90,7 +112,7 @@ $canvas.on('mousedown', function(e) {
 /**
  * Event listener that emits a draw event on mouse movement if the user is actually drawing
  */
-$canvas.on('mousemove', function(e) {
+$canvas.on('mousemove', function (e) {
   if (isDrawing) {
     const payload = getCursorPosition(canvas, e);
     drawChannel.emit('draw', payload);
@@ -100,9 +122,9 @@ $canvas.on('mousemove', function(e) {
 /**
  * Event listener that emits one last draw event and sets the isDrawing boolean to false
  */
-$canvas.on('mouseup', function(e) {
+$canvas.on('mouseup', function (e) {
   if (isDrawing) {
-    const payload =  getCursorPosition(canvas, e);
+    const payload = getCursorPosition(canvas, e);
     drawChannel.emit('draw', payload);
     isDrawing = false;
   }
@@ -111,7 +133,7 @@ $canvas.on('mouseup', function(e) {
 /**
  * Event listener that sets the isDrawing boolean to false if the mouse leaves the canvas element
  */
-$canvas.on('mouseleave', function(e) {
+$canvas.on('mouseleave', function (e) {
   isDrawing = false;
 });
 
@@ -119,7 +141,7 @@ $canvas.on('mouseleave', function(e) {
  * Event listener that executes a series of commands to clear the current page when a user clicks
  * the button with an ID of clear-all
  */
-$('#clear-all').on('click', function() {
+$('#clear-all').on('click', function () {
   context.clearRect(0, 0, canvas.width, canvas.height);
   line_history = new Array();
   all_histories[currIndex] = line_history;
@@ -130,7 +152,7 @@ $('#clear-all').on('click', function() {
 /**
  * Event listener that loads the next cached page when a user clicks the button with an ID of next-page
  */
-$('#next-page').on('click', function() {
+$('#next-page').on('click', function () {
   const newIndex = currIndex + 1;
   if (newIndex <= all_histories.length - 1) {
     redrawExistingPage(newIndex);
@@ -146,7 +168,7 @@ $('#next-page').on('click', function() {
 /**
  * Event listener that loads the previous cached page when a user clicks the button with an ID of prev-page
  */
-$('#prev-page').on('click', function() {
+$('#prev-page').on('click', function () {
   const newIndex = currIndex - 1;
   if (newIndex >= 0) {
     redrawExistingPage(newIndex);
@@ -159,7 +181,7 @@ $('#prev-page').on('click', function() {
  * that page will display upon deletion of current page. If a previous page does not exist, either the next page
  * will display or the current page will simply be cleared.
  */
-$('#delete-page').on('click', function() {
+$('#delete-page').on('click', function () {
   if (all_histories.length) {
     all_histories.splice(currIndex, 1);
     drawChannel.emit('deleteHistory', currIndex);
@@ -179,3 +201,17 @@ $('#delete-page').on('click', function() {
 drawChannel.on('getAllHistories', () => {
   sendAllHistories();
 });
+
+function sendScrollInfo(scrollPayload) {
+  drawChannel.emit('updateScroll', scrollPayload);
+}
+
+$('#pencil-button').on('click', () => {
+  currentAction = 'pencil';
+});
+
+$('#text-button').on('click', () => {
+  currentAction = 'text';
+});
+
+

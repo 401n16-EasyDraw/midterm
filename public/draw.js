@@ -10,51 +10,62 @@ function getCursorPosition(canvas, event) {
   const rect = canvas.getBoundingClientRect();
   const newXCoords = event.clientX - rect.left;
   const newYCoords = event.clientY - rect.top;
-  if (currentAction === 'type') {
-    console.log('we are typing');
-    context.font = '45px Arial';
-    context.fillText('Hello World', newXCoords, newYCoords);
-  }
-  const lineWidth = $('#line-width').val();
-  const lineColor = `#${$('#color-picker').val()}`;
 
-  if (currentAction === 'draw') {
+  /* eslint-disable */
+  switch (currentAction) {
+    case 'pencil':
+      const lineWidth = $('#line-width').val();
+      const lineColor = `#${$('#color-picker').val()}`;
 
-    if (event.type === 'mousedown' || isDrawing) {
-      // const rect = canvas.getBoundingClientRect();
-      // const newXCoords = event.clientX - rect.left;
-      // const newYCoords = event.clientY - rect.top;
+      if (event.type === 'mousedown' || isDrawing) {
 
-      if (event.type !== 'mousedown') {
-        drawLine(
-          context,
-          xCoord,
-          yCoord,
-          newXCoords,
-          newYCoords,
-          lineWidth,
-          lineColor
-        );
+        if (event.type !== 'mousedown') {
+          drawLine(
+            context,
+            xCoord,
+            yCoord,
+            newXCoords,
+            newYCoords,
+            lineWidth,
+            lineColor
+          );
+        }
+
+        xCoord = newXCoords;
+        yCoord = newYCoords;
+
+        const coordObj = {
+          x: xCoord,
+          y: yCoord,
+          thickness: lineWidth,
+          color: lineColor,
+          eventType: event.type,
+        };
+
+        isDrawing = event.type === 'mouseup' ? false : true;
+        line_history.push(coordObj);
+        all_histories[currIndex] = line_history;
+        return coordObj;
       }
-
-      xCoord = newXCoords;
-      yCoord = newYCoords;
-
-      const coordObj = {
-        x: xCoord,
-        y: yCoord,
-        thickness: lineWidth,
-        color: lineColor,
-        eventType: event.type,
-      };
-
-      isDrawing = event.type === 'mouseup' ? false : true;
-      line_history.push(coordObj);
-      all_histories[currIndex] = line_history;
-      return coordObj;
-    }
+      break;
+    case 'text':
+      clickedX = newXCoords;
+      clickedY = newYCoords;
+      break;
+    default:
+      break;
   }
+  /* eslint-enable */
 }
+
+$canvas.on('keyup', (event) => {
+  if (currentAction === 'type') {
+    const rect = canvas.getBoundingClientRect();
+    const newXCoords = event.clientX - rect.left;
+    const newYCoords = event.clientY - rect.top;
+    context.fillText(event.target.value, newXCoords, newYCoords);
+  }
+});
 
 /**
  * Helper function that sends the history of the drawer's current page to the viewer's page
@@ -195,6 +206,12 @@ function sendScrollInfo(scrollPayload) {
   drawChannel.emit('updateScroll', scrollPayload);
 }
 
-$('#pencil-button').on('click', function () {
-  currentAction = 'draw';
+$('#pencil-button').on('click', () => {
+  currentAction = 'pencil';
 });
+
+$('#text-button').on('click', () => {
+  currentAction = 'text';
+});
+
+

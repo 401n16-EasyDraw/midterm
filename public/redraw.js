@@ -65,3 +65,17 @@ $('#save-button').on('click', function () {
   pdf.addImage(imgData, 0, 0);
   pdf.save('report.pdf');
 });
+
+drawChannel.on('textRead', (payload) => {
+  // need to store this as hashmap (use coord as key)
+  // and handle the case of update text (instead of adding new text)
+  console.log(payload);
+  const { text, x, y } = payload;
+  const input = document.createElement('input');
+  input.value = text;
+  input.style.position = 'absolute';
+  input.style.left = `${x}px`;
+  input.style.top = `${y}px`;
+  input.style['z-index'] = '999999999';
+  document.body.appendChild(input);
+});

@@ -45,6 +45,7 @@ drawChannel.on('deleteHistory', (payload) => {
   all_histories.splice(payload, 1);
 });
 
+
 /**
  * Takes a payload containing the object of the draw page's current coordinates so that the redraw page can sync
  */

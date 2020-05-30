@@ -96,6 +96,7 @@ function drawLine(context, x1, y1, x2, y2, lineWidth, color) {
   context.closePath();
 }
 
+
 /**
  * @param {object} payload - the object containing information to turn into some kind of drawing
  * @returns {void}

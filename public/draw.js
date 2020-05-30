@@ -2,49 +2,68 @@
 
 sendAllHistories();
 
+context.font = '45px Arial';
+context.fillText('Hello World', 10, 50); 
 /**
  * @param {object} canvas - canvas HTML element to edit
  * @param {object} event - event object
  */
 function getCursorPosition(canvas, event) {
-  const lineWidth = $('#line-width').val();
-  const lineColor = `#${$('#color-picker').val()}`;
+  const rect = canvas.getBoundingClientRect();
+  const newXCoords = event.clientX - rect.left;
+  const newYCoords = event.clientY - rect.top;
 
-  if (event.type === 'mousedown' || isDrawing) {
-    const rect = canvas.getBoundingClientRect();
-    const newXCoords = event.clientX - rect.left;
-    const newYCoords = event.clientY - rect.top;
-
-    if (event.type !== 'mousedown') {
-      drawLine(
-        context,
-        xCoord,
-        yCoord,
-        newXCoords,
-        newYCoords,
-        lineWidth,
-        lineColor
-      );
-    }
-
-    xCoord = newXCoords;
-    yCoord = newYCoords;
-
-    const coordObj = {
-      x: xCoord,
-      y: yCoord,
-      thickness: lineWidth,
-      color: lineColor,
-      eventType: event.type,
-    };
-
-    isDrawing = event.type === 'mouseup' ? false : true;
-    line_history.push(coordObj);
-    all_histories[currIndex] = line_history;
-    return coordObj;
+  switch (currentAction) {
+    case 'pencil':
+      const lineWidth = $('#line-width').val();
+      const lineColor = `#${$('#color-picker').val()}`;
+    
+      if (event.type === 'mousedown' || isDrawing) {
+    
+        if (event.type !== 'mousedown') {
+          drawLine(
+            context,
+            xCoord,
+            yCoord,
+            newXCoords,
+            newYCoords,
+            lineWidth,
+            lineColor
+          );
+        }
+    
+        xCoord = newXCoords;
+        yCoord = newYCoords;
+    
+        const coordObj = {
+          x: xCoord,
+          y: yCoord,
+          thickness: lineWidth,
+          color: lineColor,
+          eventType: event.type,
+        };
+    
+        isDrawing = event.type === 'mouseup' ? false : true;
+        line_history.push(coordObj);
+        all_histories[currIndex] = line_history;
+        return coordObj;
+      }
+      break;
+    case 'text':
+      clickedX = newXCoords;
+      clickedY = newYCoords;
+      break;
+    default:
+      break;
   }
 }
 
+document.addEventListener('keyup', (event) => {
+  if (currentAction === 'text') {
+    console.log('does this trigger?');
+    context.fillText(event.target.value, clickedX, clickedY);
+  }
+});
 /**
  * Helper function that sends the history of the drawer's current page to the viewer's page
  */
@@ -62,6 +81,11 @@ function sendAllHistories() {
   const height = canvas.height;
   const historyPayload = { all_histories, currIndex, scrollY, height };
   drawChannel.emit('sendAllHistories', historyPayload);
+}
+
+
+function sendScrollInfo(scrollPayload) {
+  drawChannel.emit('updateScroll', scrollPayload);
 }
 
 /**
@@ -171,6 +195,14 @@ $('#delete-page').on('click', function() {
     }
     updateHistoryAndIndex();
   }
+});
+
+$('#pencil-button').on('click', () => {
+  currentAction = 'pencil';
+});
+
+$('#text-button').on('click', () => {
+  currentAction = 'text';
 });
 
 /**

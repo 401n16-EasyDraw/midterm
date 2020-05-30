@@ -14,6 +14,9 @@ let currIndex = 0;
 let line_history = new Array();
 let all_histories = new Array();
 all_histories.push(line_history);
+let currentAction = 'pencil';
+let clickedX = 0;
+let clickedY = 0;
 
 const $container = $('#container');
 $container.append('<canvas></canvas>');

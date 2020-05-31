@@ -26,6 +26,8 @@ document.getElementById('container').addEventListener('mouseup', (event) => {
       
       if (payload) {
         drawChannel.emit('textWrite', payload);
+        line_history.push(payload);
+        console.log('what is line history now?', line_history);
       }
     });
     document.body.appendChild(input);

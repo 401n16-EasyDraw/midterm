@@ -65,3 +65,8 @@ $('#save-button').on('click', function () {
   pdf.addImage(imgData, 0, 0);
   pdf.save('report.pdf');
 });
+
+drawChannel.on('textRead', (payload) => {
+  context.font = `${payload.fontSize} ${payload.fontStyle}`;
+  context.fillText(payload.text, payload.xCoord, payload.yCoord);
+});

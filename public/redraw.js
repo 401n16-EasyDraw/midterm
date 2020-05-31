@@ -54,6 +54,14 @@ drawChannel.on('updateScroll', (payload) => {
 });
 
 /**
+ * Rectangle
+ */
+
+//  drawChannel.on('rectangle',(payload) => {
+
+//  })
+
+/**
  * Event listener that saves the current page as a pdf when a user clicks the button with an ID of save-button.
  * This functionality is still a work in a progress. We have not implemented the ability to print past one page yet
  */

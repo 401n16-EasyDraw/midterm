@@ -32,6 +32,16 @@ let clickedX = 0;
 let clickedY = 0;
 let currTextbox;
 
+//rectangle variables
+let canvasx = $(canvas).offset().left;
+ let canvasy = $(canvas).offset().top;
+ let last_mousex;
+ let last_mousey;
+ let mousey;
+ last_mousex = last_mousey = 0;
+ let mousex = mousey = 0;
+ let mousedown = false;
+
 /**
  * Function that detect the distance between the mouse and the top of the document. 
  * This is especially useful when the user scrolls past the default height of the page and wishes to create

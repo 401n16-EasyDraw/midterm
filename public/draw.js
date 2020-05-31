@@ -52,6 +52,24 @@ function getCursorPosition(canvas, event) {
       clickedX = newXCoords;
       clickedY = newYCoords;
       break;
+    case 'rectangle':
+      console.log('Rectangle test');
+      // if(event.type === 'mousedown'){
+      //   clickedX = newXCoords;
+      //   clickedY = newYCoords;
+      // }else{
+      //  drawLine(
+      //   context,
+      //   clickedX,
+      //   clickedY,
+      //   newXCoords,
+      //   newYCoords,
+      //   lineWidth,
+      //   lineColor
+      //  );
+      // }
+      // rectangle();
+      break;
     default:
       break;
   }
@@ -107,6 +125,11 @@ document.addEventListener('scroll', function () {
 $canvas.on('mousedown', function (e) {
   const payload = getCursorPosition(canvas, e);
   drawChannel.emit('draw', payload);
+  if(currentAction === 'rectangle'){
+    last_mousex = parseInt(e.clientX - canvasx);
+    last_mousey = parseInt(e.clientY - canvasy);
+    mousedown = true;
+  }
 });
 
 /**
@@ -116,6 +139,15 @@ $canvas.on('mousemove', function (e) {
   if (isDrawing) {
     const payload = getCursorPosition(canvas, e);
     drawChannel.emit('draw', payload);
+  }else if(currentAction === 'rectangle'){
+    context.clearRect(0, 0, canvas.width, canvas.height); //clear canvas
+    context.beginPath();
+    let width = mousex - last_mousex;
+    let height = mousey - last_mousey;
+    context.rect(last_mousex, last_mousey, width, height);
+    context.strokeStyle = 'black';
+    context.lineWidth = 10;
+    context.stroke();
   }
 });
 
@@ -127,6 +159,7 @@ $canvas.on('mouseup', function (e) {
     const payload = getCursorPosition(canvas, e);
     drawChannel.emit('draw', payload);
     isDrawing = false;
+    mousedown = false;
   }
 });
 
@@ -200,46 +233,51 @@ $('#delete-page').on('click', function () {
  * Draw rectangle
  */
 
+ //function rectangle (){
+ //Variables
+//  let canvasx = $(canvas).offset().left;
+//  let canvasy = $(canvas).offset().top;
+//  let last_mousex;
+//  let last_mousey;
+//  let mousey;
+//  last_mousex = last_mousey = 0;
+//  let mousex = mousey = 0;
+//  let mousedown = false;
+
+
+ //Mousedown
+//  $(canvas).on('mousedown', function (e) {
+//   //  last_mousex = parseInt(e.clientX - canvasx);
+//   //  last_mousey = parseInt(e.clientY - canvasy);
+//   //  mousedown = true;
+//  });
+
+//  //Mouseup
+//  $(canvas).on('mouseup', function (e) {
+//    mousedown = false;
+//  });
+
+ //Mousemove
+//  $(canvas).on('mousemove', function (e) {
+//    mousex = parseInt(e.clientX - canvasx);
+//    mousey = parseInt(e.clientY - canvasy);
+//    if (mousedown) {
+//      context.clearRect(0, 0, canvas.width, canvas.height); //clear canvas
+//      context.beginPath();
+//      let width = mousex - last_mousex;
+//      let height = mousey - last_mousey;
+//      context.rect(last_mousex, last_mousey, width, height);
+//      context.strokeStyle = 'black';
+//      context.lineWidth = 10;
+//      context.stroke();
+//    }
+   //Output
+  
+ //}
+
 $('#rect-button').on('click', function () {
-  //Canvas
-const canvas = document.querySelector('canvas');
-const context = canvas.getContext('2d');
-//Variables
-var canvasx = $(canvas).offset().left;
-var canvasy = $(canvas).offset().top;
-var last_mousex = last_mousey = 0;
-var mousex = mousey = 0;
-var mousedown = false;
-
-//Mousedown
-$(canvas).on('mousedown', function(e) {
-    last_mousex = parseInt(e.clientX-canvasx);
-	last_mousey = parseInt(e.clientY-canvasy);
-    mousedown = true;
-});
-
-//Mouseup
-$(canvas).on('mouseup', function(e) {
-    mousedown = false;
-});
-
-//Mousemove
-$(canvas).on('mousemove', function(e) {
-    mousex = parseInt(e.clientX-canvasx);
-	mousey = parseInt(e.clientY-canvasy);
-    if(mousedown) {
-        context.clearRect(0,0,canvas.width,canvas.height); //clear canvas
-        context.beginPath();
-        var width = mousex-last_mousex;
-        var height = mousey-last_mousey;
-        context.rect(last_mousex,last_mousey,width,height);
-        context.strokeStyle = 'black';
-        context.lineWidth = 10;
-        context.stroke();
-    }
-    //Output
-    $('#container').html('current: '+mousex+', '+mousey+'<br/>last: '+last_mousex+', '+last_mousey+'<br/>mousedown: '+mousedown);
-});
+  currentAction = 'rectangle';
+   //drawChannel.emit('rectangle', payload);
 });
 
 /**

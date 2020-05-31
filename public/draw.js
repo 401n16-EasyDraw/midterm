@@ -18,7 +18,6 @@ function getCursorPosition(canvas, event) {
       const lineColor = `#${$('#color-picker').val()}`;
 
       if (event.type === 'mousedown' || isDrawing) {
-
         if (event.type !== 'mousedown') {
           drawLine(
             context,
@@ -75,7 +74,6 @@ function sendAllHistories() {
   const historyPayload = { all_histories, currIndex, scrollY, height };
   drawChannel.emit('sendAllHistories', historyPayload);
 }
-
 
 function sendScrollInfo(scrollPayload) {
   drawChannel.emit('updateScroll', scrollPayload);
@@ -214,5 +212,3 @@ $('#pencil-button').on('click', () => {
 $('#text-button').on('click', () => {
   currentAction = 'text';
 });
-
-

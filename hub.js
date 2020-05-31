@@ -11,7 +11,6 @@ draw.on('connection', socket => {
   });
 
   socket.on('textWrite', payload => {
-    console.log(payload);
     draw.emit('textRead', payload);
   });
 

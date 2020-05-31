@@ -56,6 +56,15 @@ function getCursorPosition(canvas, event) {
   /* eslint-enable */
 }
 
+$canvas.on('keyup', (event) => {
+  if (currentAction === 'type') {
+    const rect = canvas.getBoundingClientRect();
+    const newXCoords = event.clientX - rect.left;
+    const newYCoords = event.clientY - rect.top;
+    context.fillText(event.target.value, newXCoords, newYCoords);
+  }
+});
+
 /**
  * Helper function that sends the history of the drawer's current page to the viewer's page
  */

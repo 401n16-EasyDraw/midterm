@@ -18,16 +18,17 @@ document.getElementById('container').addEventListener('mouseup', (event) => {
     input.style['z-index'] = '999999999';
     input.style['font-size'] = fontSize;
     input.style['font-style'] = fontStyle;
+    input.id = line_history.length;
     context.font = `${fontSize} ${fontStyle}`;
 
     input.addEventListener('keyup', (event) => {
       const payload = { text: event.target.value, xCoord, yCoord, fontSize, fontStyle };
+      console.log('What is payload text now?', payload.text);
       context.fillText(payload.text, xCoord, yCoord);
       
       if (payload) {
         drawChannel.emit('textWrite', payload);
-        line_history.push(payload);
-        console.log('what is line history now?', line_history);
+        input.id ? line_history[input.id] = payload: line_history.push(payload);
       }
     });
     document.body.appendChild(input);

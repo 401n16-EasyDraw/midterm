@@ -14,6 +14,9 @@ draw.on('connection', socket => {
     draw.emit('textRead', payload);
   });
 
+  // socket.on('rectangle', () => {
+  //   draw.emit('rectangle');
+  // });
   socket.on('getAllHistories', () => {
     draw.emit('getAllHistories');
   });

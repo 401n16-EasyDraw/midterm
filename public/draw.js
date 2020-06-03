@@ -284,6 +284,7 @@ $('#delete-page').on('click', function () {
 
 $('#rect-button').on('click', function () {
   currentAction = 'rectangle';
+});
    //drawChannel.emit('rectangle', payload);
 
 $('#pencil-button').on('click', () => {

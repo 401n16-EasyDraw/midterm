@@ -1,5 +1,5 @@
 'use strict';
-/** 
+/**
  * These are common variables usedd throughout the rest of the front end js files.
  * Even though this file is called before the files which depend on these variables,
  * eslint is unable to account for variable declarations outside an immediate file.
@@ -33,7 +33,7 @@ let currentAction = 'pencil';
 let currTextbox;
 
 /**
- * Function that detect the distance between the mouse and the top of the document. 
+ * Function that detect the distance between the mouse and the top of the document.
  * This is especially useful when the user scrolls past the default height of the page and wishes to create
  * a longer document.
  * Credit: https://stackoverflow.com/questions/6460116/detecting-offset-of-an-element-on-scroll-in-javascript-jquery
@@ -132,9 +132,11 @@ function redrawExistingPage(newIndex) {
   line_history = all_histories[newIndex];
   context.clearRect(0, 0, canvas.width, canvas.height);
   currIndex = newIndex;
-  line_history.forEach((coordObj) => {
-    handlePayload(coordObj);
-  });
+  if (line_history) {
+    line_history.forEach((coordObj) => {
+      handlePayload(coordObj);
+    });
+  }
 }
 
 /**

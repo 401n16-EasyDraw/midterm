@@ -18,7 +18,6 @@ function getCursorPosition(canvas, event) {
       const lineColor = `#${$('#color-picker').val()}`;
 
       if (event.type === 'mousedown' || isDrawing) {
-
         if (event.type !== 'mousedown') {
           drawLine(
             context,
@@ -41,7 +40,6 @@ function getCursorPosition(canvas, event) {
           color: lineColor,
           eventType: event.type,
         };
-
         isDrawing = event.type === 'mouseup' ? false : true;
         line_history.push(coordObj);
         all_histories[currIndex] = line_history;
@@ -49,8 +47,8 @@ function getCursorPosition(canvas, event) {
       }
       break;
     case 'text':
-      clickedX = newXCoords;
-      clickedY = newYCoords;
+      xCoord = newXCoords;
+      yCoord = newYCoords;
       break;
     case 'rectangle':
       console.log('Rectangle test');
@@ -104,6 +102,10 @@ function sendAllHistories() {
   drawChannel.emit('sendAllHistories', historyPayload);
 }
 
+function sendScrollInfo(scrollPayload) {
+  drawChannel.emit('updateScroll', scrollPayload);
+}
+
 /**
  * Event listener that calculates the page's current position when a scroll occurs
  */
@@ -124,11 +126,16 @@ document.addEventListener('scroll', function () {
  */
 $canvas.on('mousedown', function (e) {
   const payload = getCursorPosition(canvas, e);
+
   drawChannel.emit('draw', payload);
   if(currentAction === 'rectangle'){
     last_mousex = parseInt(e.clientX - canvasx);
     last_mousey = parseInt(e.clientY - canvasy);
     mousedown = true;
+  }
+
+  if (currentAction === 'pencil') {
+    drawChannel.emit('draw', payload);
   }
 });
 
@@ -278,18 +285,6 @@ $('#delete-page').on('click', function () {
 $('#rect-button').on('click', function () {
   currentAction = 'rectangle';
    //drawChannel.emit('rectangle', payload);
-});
-
-/**
- * Calls the sendAllHistories function when a socket.io getAllHistories emit is received
- */
-drawChannel.on('getAllHistories', () => {
-  sendAllHistories();
-});
-
-function sendScrollInfo(scrollPayload) {
-  drawChannel.emit('updateScroll', scrollPayload);
-}
 
 $('#pencil-button').on('click', () => {
   currentAction = 'pencil';
@@ -299,4 +294,17 @@ $('#text-button').on('click', () => {
   currentAction = 'text';
 });
 
+/**
+ * Calls the sendAllHistories function when a socket.io getAllHistories emit is received
+ */
+drawChannel.on('getAllHistories', () => {
+  sendAllHistories();
+});
 
+$('#pencil-button').on('click', () => {
+  currentAction = 'pencil';
+});
+
+$('#text-button').on('click', () => {
+  currentAction = 'text';
+});

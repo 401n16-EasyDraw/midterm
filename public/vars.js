@@ -14,6 +14,8 @@ let currIndex = 0;
 let line_history = new Array();
 let all_histories = new Array();
 all_histories.push(line_history);
+let clickedX = 0;
+let clickedY = 0;
 
 const $container = $('#container');
 $container.append('<canvas></canvas>');
@@ -28,8 +30,6 @@ const $body = $('body');
 let isTyping = false;
 
 let currentAction = 'pencil';
-let clickedX = 0;
-let clickedY = 0;
 let currTextbox;
 
 //rectangle variables
@@ -118,7 +118,10 @@ function drawLine(context, x1, y1, x2, y2, lineWidth, color) {
  * @returns {void}
  */
 function handlePayload(payload) {
-  if (payload.eventType !== 'mousedown') {
+  if (payload.text) {
+    context.font = `${payload.fontSize} ${payload.fontStyle}`;
+    context.fillText(payload.text, payload.xCoord, payload.yCoord);
+  } else if (payload.eventType !== 'mousedown') {
     drawLine(
       context,
       xCoord,

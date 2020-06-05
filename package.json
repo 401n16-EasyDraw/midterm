@@ -4,7 +4,9 @@
   "description": "midterm project for Class 401n16",
   "main": "hub.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint **/.js",
+    "test": "jest --coverage --verbose",
+    "test-watch": "jest --watchAll --coverage --verbose"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,10 @@
     "jest": "^26.0.1"
   },
   "dependencies": {
-    "socket.io": "^2.3.0"
+    "http": "0.0.1-security",
+    "jest-websocket-mock": "^2.0.2",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "test": "^0.6.0"
   }
 }

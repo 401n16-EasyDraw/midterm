@@ -2,6 +2,7 @@ const WS = require('jest-websocket-mock');
 const ioBack = require('socket.io');
 const io = require('socket.io-client');
 const http = require('http');
+const server = require('../hub.js')
 
 
 let socket;
@@ -92,17 +93,17 @@ test("test to connected clients", async () => {
   const client2 = new WebSocket("ws://localhost:3000");
   await server.connected;
  
-  const messages = { client1: [], client2: [] };
+  const messages = { clientx: [], clienty: [] };
   client1.onmessage = e => {
-    messages.client1.push(e.data);
+    messages.clientx.push(e.data);
   };
   client2.onmessage = e => {
-    messages.client2.push(e.data);
+    messages.clienty.push(e.data);
   };
  
   server.send("To all clients");
   expect(messages).toEqual({
-    client1: ["To all clients"],
-    client2: ["To all clients"],
+    clientx: ["To all clients"],
+    clienty: ["To all clients"],
   });
 });

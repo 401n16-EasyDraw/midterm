@@ -8,18 +8,17 @@ Our application allows two viewers to look at the same document on their own web
 
 ### Links and Resources
 
-_insert links and resources here_
+- Various Stack Overflow resources:
+  - [Erasing previously drawn lines on an HTML5 canvas](https://stackoverflow.com/questions/7365436/erasing-previously-drawn-lines-on-an-html5-canvas)
+  - [Canvas jagged line issue](https://stackoverflow.com/questions/18836918/canvas-jagged-line-issue)
+  - [What is pixel width and length for jspdf's default 'a4' format?](https://stackoverflow.com/questions/44757411/what-is-pixel-width-and-length-for-jspdfs-default-a4-format)
+  - [Expanding a div's height when page scrolls down](https://stackoverflow.com/questions/38328697/expanding-a-divs-height-when-page-scrolls-down)
 
 ### Documentation
 
 - [Socket.IO Emit Cheatsheet](https://socket.io/docs/emit-cheatsheet/)
 - [jQuery API](https://api.jquery.com/)
 - [jsdPDF](http://raw.githack.com/MrRio/jsPDF/master/docs/)
-- Various Stack Overflow resources:
-  - [Erasing previously drawn lines on an HTML5 canvas](https://stackoverflow.com/questions/7365436/erasing-previously-drawn-lines-on-an-html5-canvas)
-  - [Canvas jagged line issue](https://stackoverflow.com/questions/18836918/canvas-jagged-line-issue)
-  - [What is pixel width and length for jspdf's default 'a4' format?](https://stackoverflow.com/questions/44757411/what-is-pixel-width-and-length-for-jspdfs-default-a4-format)
-  - [Expanding a div's height when page scrolls down](https://stackoverflow.com/questions/38328697/expanding-a-divs-height-when-page-scrolls-down)
 
 ### Setup
 

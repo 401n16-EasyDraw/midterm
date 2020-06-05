@@ -84,3 +84,9 @@ $('#delete-page').on('click', () => {
     lastInput.style['display'] = 'none';
   }
 });
+
+$('#clear-all').on('click', () => {
+  if (lastInput) {
+    lastInput.style['display'] = 'none';
+  }
+});
